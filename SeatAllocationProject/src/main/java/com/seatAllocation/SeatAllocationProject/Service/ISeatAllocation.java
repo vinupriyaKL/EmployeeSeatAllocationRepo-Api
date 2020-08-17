@@ -9,10 +9,11 @@ import com.seatAllocation.SeatAllocationProject.Exception.SeatNotAvailableExcept
 import com.seatAllocation.SeatAllocationProject.Model.EmployeeSeatModel;
 
 public interface ISeatAllocation {
-	public EmployeeSeatModel allocateSeat(EmployeeSeatModel emp) throws CommonException,SeatNotAvailableException,NoDuplicateAllocationException;
+	public EmployeeSeatModel allocateSeat(EmployeeSeatModel emp) throws Exception,CommonException,SeatNotAvailableException,NoDuplicateAllocationException;
 	public EmployeeSeatModel updateSeat(EmployeeSeatModel emp) throws EmployeeNotFoundException,SeatNotAvailableException;
 	public EmployeeSeatModel findEmployee(String emp) throws EmployeeNotFoundException;
 	public List<EmployeeSeatModel>  findAllEmployeeDetails();
+	public List<EmployeeSeatModel> findEmployeeBasedOnBuilding(String buildingNo);
 
 	
 }

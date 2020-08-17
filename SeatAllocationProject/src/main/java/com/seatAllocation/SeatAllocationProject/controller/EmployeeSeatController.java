@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.seatAllocation.SeatAllocationProject.Exception.CommonException;
@@ -29,7 +30,7 @@ public class EmployeeSeatController {
 
 
 @PostMapping("/allocate-seat")
-public ResponseEntity<?> alloacteSeats(@RequestBody EmployeeSeatModel empSeat) throws CommonException,SeatNotAvailableException,NoDuplicateAllocationException{
+public ResponseEntity<?> alloacteSeats(@RequestBody EmployeeSeatModel empSeat) throws Exception,CommonException,SeatNotAvailableException,NoDuplicateAllocationException{
 	
 	try {
 		EmployeeSeatModel emp=serviceEmp.allocateSeat(empSeat);
@@ -46,6 +47,9 @@ public ResponseEntity<?> alloacteSeats(@RequestBody EmployeeSeatModel empSeat) t
 		return new ResponseEntity<String>("Either Building no or floor no is invalid.Please select building no less than or equal to 8 and Floor no less than or equal to 10",HttpStatus.NOT_FOUND);
 
 
+	}
+	catch(Exception e) {
+		return new ResponseEntity<String>("Please enter all mandatory fields",HttpStatus.BAD_REQUEST);
 	}
 	
 	
@@ -70,8 +74,6 @@ public ResponseEntity<?> updateSeatDetails(@RequestBody EmployeeSeatModel empSea
 		return new ResponseEntity<String>("Seat Not Available.It is already allocated.Please do allocate any other available seats",HttpStatus.NOT_FOUND);
 	}
 	
-	
-
 	
 	
 }
@@ -102,6 +104,15 @@ public ResponseEntity<?> fetchEmpSeatDetails(@PathVariable("id") String id) thro
 		
 	
 }
+
+@GetMapping("/filter-basedOn-buildingNo")
+public ResponseEntity<?> findFilteredEmployee(@RequestParam("buildingNo") String buildingNo){
+	List<EmployeeSeatModel>  emp=serviceEmp.findEmployeeBasedOnBuilding(buildingNo);
+	return new ResponseEntity<List<EmployeeSeatModel> >(emp,HttpStatus.OK);
+
+
+}
+
 
 
 }

@@ -18,7 +18,7 @@ public class SeatAllocationServiceImpl implements ISeatAllocation {
 	ISeatAllocationRepo repoEmp;
 
 	@Override
-	public EmployeeSeatModel allocateSeat(EmployeeSeatModel emp) throws SeatNotAvailableException,CommonException,NoDuplicateAllocationException {
+	public EmployeeSeatModel allocateSeat(EmployeeSeatModel emp) throws SeatNotAvailableException,CommonException,NoDuplicateAllocationException,Exception {
 		
 		boolean flag=findAllDetails(emp);
 		
@@ -29,7 +29,9 @@ public class SeatAllocationServiceImpl implements ISeatAllocation {
 		if(empId.isPresent()) {
 			throw new NoDuplicateAllocationException("One employee cannot have more than one seat");
 		}
-		
+		if(emp.getBuildingNo()==null || emp.getEmpId()==null || emp.getEmpName()==null || emp.getFloorNo()==null || emp.getProjectCode()==null || emp.getSeatNo()==null) {
+			throw new Exception("Please enter mandatory fields");
+		}
 		if(flag==true) {
 			throw new SeatNotAvailableException("Seat is already Occupied");
 
@@ -106,6 +108,13 @@ public class SeatAllocationServiceImpl implements ISeatAllocation {
 	public List<EmployeeSeatModel> findAllEmployeeDetails() {
 		// TODO Auto-generated method stub
 		return repoEmp.findAll();
+	}
+	@Override
+	public List<EmployeeSeatModel> findEmployeeBasedOnBuilding(String buildingNo){
+		System.out.println(buildingNo);
+		
+		return repoEmp.findByBuildingNo(buildingNo);
+		
 	}
 
 	
